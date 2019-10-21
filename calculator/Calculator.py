@@ -18,8 +18,7 @@ class Calculator:
                 valid_numbers = [number for number in splitted_numbers if number <= 1000]
                 return sum(valid_numbers)
             else:
-                raise NegativesNotAllowed(negative_numbers)
-                
+                raise NegativesNotAllowed(negative_numbers)  
         else:
             return 0
 
