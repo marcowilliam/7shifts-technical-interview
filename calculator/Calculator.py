@@ -6,18 +6,20 @@ class Calculator:
         if numbers.strip():
             delimiter_found = re.search('//(.*)\n', numbers)
             if delimiter_found:
-                delimiter = delimiter_found.group(1)
-                numbers_to_add = numbers.split("\n")[1]
-                splitted_numbers = map(int, numbers_to_add.split(delimiter))
+                delimiter_grouped = delimiter_found.group(1)
+                delimiters = re.escape(delimiter_grouped).replace("\,", "|")
+                numbers_to_add = numbers.split("\n", 1)[1]
+                splitted_numbers = map(int, re.split(delimiters, numbers_to_add))
             else:
                 splitted_numbers = map(int, numbers.split(","))
             
             negative_numbers = [number for number in splitted_numbers if number < 0]
-            if negative_numbers:
-                raise NegativesNotAllowed(negative_numbers)
-            else:
+            if not negative_numbers:
                 valid_numbers = [number for number in splitted_numbers if number <= 1000]
                 return sum(valid_numbers)
+            else:
+                raise NegativesNotAllowed(negative_numbers)
+                
         else:
             return 0
 
