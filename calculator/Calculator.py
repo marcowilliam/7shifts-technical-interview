@@ -4,23 +4,27 @@ class Calculator:
 
     def add(self, numbers):
         if numbers.strip():
-            delimiter_found = re.search('//(.*)\n', numbers)
-            if delimiter_found:
-                delimiter_grouped = delimiter_found.group(1)
-                delimiters = re.escape(delimiter_grouped).replace("\,", "|")
-                numbers_to_add = numbers.split("\n", 1)[1]
-                splitted_numbers = map(int, re.split(delimiters, numbers_to_add))
-            else:
-                splitted_numbers = map(int, numbers.split(","))
-            
-            negative_numbers = [number for number in splitted_numbers if number < 0]
-            if not negative_numbers:
-                valid_numbers = [number for number in splitted_numbers if number <= 1000]
-                return sum(valid_numbers)
-            else:
-                raise NegativesNotAllowed(negative_numbers)  
+            splitted_numbers = self.split_numbers(numbers)
+            self.check_negative_numbers(splitted_numbers)
+            valid_numbers = [number for number in splitted_numbers if number <= 1000]
+            return sum(valid_numbers)
         else:
             return 0
+    
+    def split_numbers(self, numbers):
+        delimiter_found = re.search('//(.*)\n', numbers)
+        if delimiter_found:
+            delimiter_grouped = delimiter_found.group(1)
+            delimiters = re.escape(delimiter_grouped).replace("\,", "|")
+            numbers_to_add = numbers.split("\n", 1)[1]
+            return map(int, re.split(delimiters, numbers_to_add))
+        else:
+            return map(int, numbers.split(","))
+    
+    def check_negative_numbers(self, numbers):
+        negative_numbers = [number for number in numbers if number < 0]
+        if negative_numbers:
+            raise NegativesNotAllowed(negative_numbers)
 
 class NegativesNotAllowed(Exception):
 
