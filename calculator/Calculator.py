@@ -16,12 +16,13 @@ class Calculator:
             if negative_numbers:
                 raise NegativesNotAllowed(negative_numbers)
             else:
-                return sum(splitted_numbers)
+                valid_numbers = [number for number in splitted_numbers if number <= 1000]
+                return sum(valid_numbers)
         else:
             return 0
 
 class NegativesNotAllowed(Exception):
-    
+
      def __init__(self, value):
          self.value = value
      def __str__(self):
